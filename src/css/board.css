@@ -1,0 +1,138 @@
+.title{
+  font-family: 'Raleway';
+  font-weight: 200;
+  font-size: 3rem;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+#gameBoard{
+  width: 600px;
+  height: 600px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);  
+}
+#gameBoard>div,
+#gameBoard>button{
+  position: relative;
+  background-color: transparent;
+  border: 1px solid white;
+  cursor: pointer;
+}
+#gameBoard>button:disabled{  
+  position: relative;
+  cursor: auto;  
+}
+#gameBoard>.X::before,
+#gameBoard>.X::after,
+.gameboard.X>.slot::before,
+.gameboard.X>.slot::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 75%;
+  height: 3px;
+  background-color: white;
+  opacity: 1;
+}
+#gameBoard>.X::before,
+.gameboard.X>.slot::before{
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+#gameBoard>.X::after,
+.gameboard.X>.slot::after{
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+#gameBoard>.O::before,
+.gameboard.O>.slot::before{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
+}
+#gameBoard>.O::after,
+.gameboard.O>.slot::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background-color: black;  
+  transform: translate(-50%, -50%);  
+}
+.gameboard.X>.slot::before,
+.gameboard.X>.slot::after,
+.gameboard.O>.slot::before{
+  background-color: transparent;
+  transition: background-color 200ms ease-in-out;
+}
+.gameboard.X>.slot:hover::before,
+.gameboard.X>.slot:hover::after,
+.gameboard.O>.slot:hover::before{
+  background-color: rgb(50, 50, 50);
+}
+#gameBoard>button:nth-child(3n+1){
+  border: none;  
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+}
+#gameBoard>button:nth-child(3n+3){
+  border: none;  
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+}
+#gameBoard>button:nth-child(n+8){
+  border: none;  
+  border-left: 1px solid white;  
+}
+#gameBoard>button:nth-child(2){
+  border: none;
+  border-bottom: 1px solid white;
+}
+#gameBoard>button:nth-child(5){
+  border: none;
+  border-bottom: 1px solid white;
+}
+#gameBoard>button:nth-child(7),
+#gameBoard>button:nth-child(8){  
+  border-bottom: none;
+  border-left: none;
+}
+
+.players-score{  
+  width: 600px;
+  height: 100px;
+  margin-top: 64px;
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.players-score__player{
+  width: 150px;
+  font-family: 'Raleway';
+  text-align: center;    
+}
+.players-score__player>h2{
+  width: inherit;
+  padding-bottom: 4px;  
+  font-size: 1.3rem;
+  font-weight: 400;
+  border-bottom: 1px solid white;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.players-score__player>p{
+  font-size: 1.5rem;
+  font-weight: 200;
+}

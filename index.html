@@ -3,10 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="src/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
   <title>Tic-Tac-Toe</title>
 </head>
 <body>
+  <div class="menu" id="playerNames">
+    <img class="logo" src="src/img/logo.svg" alt="Tic-Tac-Toe">
+    <h1 class="title">CHOOSE YOUR NAMES</h1>
+    <div class="form">
+      <div class="form__field">
+        <input type="text" id="firstPlayerName" autocomplete="off" autofocus/>
+        <label for="firstPlayerName">Player 1</label>
+      </div>
+      <div class="form__field">
+        <input type="text" id="secondPlayerName" autocomplete="off"/>
+        <label for="secondPlayerName">Player 2</label>
+      </div>
+    </div>
+    <button class="button" id="buttonNext" onclick="GameFlow.setPlayerNames()">Next</button>
+    <p class="error-message slide-in-bottom" id="errorMessageNames">Fill the empty fields</p>
+  </div>
+
+  <div class="menu slide-in-left padding-y" id="playerMark">    
+    <h1 class="title">CHOOSE YOUR MARK PLAYER 1</h1>
+    <div class="form">
+      <button class="form__button" data-mark="X">
+        <div class="buttonx"></div>
+      </button>
+      <button class="form__button" data-mark="O">
+        <div class="buttono"></div>
+      </button>
+    </div>
+    <button class="button" id="buttonPlay" onclick="GameFlow.setPlayerMarks()">Play</button>
+    <p class="error-message slide-in-bottom" id="errorMessageMarks">Please, choose a mark.</p>
+  </div>
   
+  <div class="slide-in-left" id="game">
+    <h1 class="title">TIC TAC TOE</h1>
+    <div class="gameboard" id="gameBoard">
+      <button class="slot" data-position="1">
+    
+      </button>
+      <button class="slot" data-position="2">
+    
+      </button>
+      <button class="slot" data-position="3">
+    
+      </button>
+      <button class="slot" data-position="4">
+    
+      </button>
+      <button class="slot" data-position="5">
+    
+      </button>
+      <button class="slot" data-position="6">
+    
+      </button>
+      <button class="slot" data-position="7">
+    
+      </button>
+      <button class="slot" data-position="8">
+    
+      </button>
+      <button class="slot" data-position="9">
+    
+      </button>
+    </div>
+    <div class="players-score">
+      <div class="players-score__player">
+        <h2 id="playerOneName">Player 1</h2>
+        <p id="playerOneScore">0</p>
+      </div>
+      <div class="players-score__player">
+        <h2 id="playerTwoName">Player 2</h2>
+        <p id="playerTwoScore">0</p>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="modal" id="modal">
+    <div class="modal__container">
+      <p class="modal__message" id="modalMessage">
+        THE WINNER IS PLAYER 1
+      </p>
+      <button class="button button--modal" onclick="Components.displayModal(false)">
+        Restart
+      </button>
+    </div>
+  </dialog>
+
   <script src="src/js/index.js" defer></script>
 </body>
 </html>

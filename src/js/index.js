@@ -1,150 +1,333 @@
-gameBoard = (function () {
-  const board = [
+const Components = (function () {
+  const chooseNames = document.getElementById('playerNames');
+  const chooseMark = document.getElementById('playerMark');
+  const board = document.getElementById('game');
+  const gameBoard = document.getElementById('gameBoard');
+  const slots = document.querySelectorAll('.slot');
+  const modal = document.getElementById('modal');
+  const modalMessage = document.getElementById('modalMessage');
+
+  let p1Mark = "";
+  const p1Name = document.getElementById('firstPlayerName');
+  const p2Name = document.getElementById('secondPlayerName');
+  const p1DisplayName = document.getElementById('playerOneName');
+  const p2DisplayName = document.getElementById('playerTwoName');
+  const p1DisplayScore = document.getElementById('playerOneScore');
+  const p2DisplayScore = document.getElementById('playerTwoScore');
+  const markX = document.querySelector('[data-mark="X"]');
+  const markO = document.querySelector('[data-mark="O"]');
+  const errorMessageNames = document.getElementById('errorMessageNames');
+  const errorMessageMarks = document.getElementById('errorMessageMarks');
+  
+  markX.addEventListener('click', function () {
+    p1Mark = this.dataset.mark;
+    markO.classList.remove('selected');
+    this.classList.add('selected');
+  })
+  markO.addEventListener('click', function () {
+    p1Mark = this.dataset.mark;
+    markX.classList.remove('selected');
+    this.classList.add('selected');
+  })  
+
+  const displayMenuNames = (display = "flex") => {    
+    chooseNames.style.display = display;
+  }
+
+  const displayMenuMark = (display = "flex") => {
+    chooseMark.style.display = display;
+  }
+
+  const displayBoard = (display = "block", mark) => {    
+    board.style.display = display;
+    gameBoard.classList.add(mark);
+  }
+
+  const displayPlayerNames = (p1, p2) => {
+    p1DisplayName.textContent = p1;
+    p2DisplayName.textContent = p2;    
+  }
+
+  const displayModal = (show = true) => {
+    if (show) {
+      modal.showModal();
+    } else
+      modal.close();
+  }
+
+  const displayErrorNames = (display = "block") => {    
+    errorMessageNames.style.display = display;    
+    
+    setTimeout(() => {
+      errorMessageNames.classList.add('vanish');
+      errorMessageNames.style.display = "none";
+    }, 2000);
+    errorMessageNames.classList.remove('vanish');
+  }
+
+  const displayErrorMarks = (display = "block") => {    
+    errorMessageMarks.style.display = display;
+    
+    setTimeout(() => {
+      errorMessageMarks.classList.add('vanish');
+      errorMessageMarks.style.display = "none";
+    }, 2000);
+    errorMessageMarks.classList.remove('vanish');
+  }
+
+  const getP1Name = () => {
+    return p1Name.value
+  }
+
+  const getP2Name = () => {
+    return p2Name.value
+  }
+
+  const getMark = () => {    
+    return p1Mark;
+  }
+
+  const getGameBoard = () => {
+    return gameBoard;
+  }
+
+  const getSlots = () => {    
+    return slots;
+  }
+
+  const setModalMessage = (message) => {
+    modalMessage.textContent = message;
+  }
+
+  const setPlayersScore = (winner) => {
+    if (winner.getName() === p1DisplayName.textContent)
+      p1DisplayScore.textContent = winner.getVictories();
+    else
+      p2DisplayScore.textContent = winner.getVictories();
+  }
+
+  return {
+    displayMenuNames,
+    displayMenuMark,
+    displayBoard,
+    displayPlayerNames,
+    displayErrorNames,    
+    displayErrorMarks,
+    displayModal,
+    getP1Name,
+    getP2Name,
+    getMark,
+    getGameBoard,
+    getSlots,
+    setModalMessage,
+    setPlayersScore
+  };
+})();
+
+const GameBoard = (function () {
+  let board = [
     [1, 2, 3],
     [4, 5, 6],
-    [7, 8, 9]    
-  ];
-
-  const winnerSlots = [
+    [7, 8, 9]
+  ]
+  
+  let winnerSlots = [
     //horizontal
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9],
-    [3, 2, 1],
-    [6, 5, 4],
-    [9, 8, 7],
     //diagonal
     [1, 5, 9],
     [3, 5, 7],
-    [9, 5, 1],
-    [7, 5, 3],
     //vertical
     [1, 4, 7],
     [2, 5, 8],
-    [3, 6, 9],
-    [7, 4, 1],
-    [8, 5, 2],
-    [9, 6, 2]
+    [3, 6, 9]
   ];
 
   const selectPosition = (position, mark) => {
     switch (position) {
-      case "1":
+      case "1":        
         board[0][0] = mark;
+        winnerSlots[0][0] = mark;
+        winnerSlots[3][0] = mark;
+        winnerSlots[5][0] = mark;
         break;
       
-      case "2":
+      case "2":        
         board[0][1] = mark;
+        winnerSlots[0][1] = mark;
+        winnerSlots[6][0] = mark;        
         break;
       
-      case "3":
+      case "3":        
         board[0][2] = mark;
+        winnerSlots[0][2] = mark;
+        winnerSlots[4][0] = mark;
+        winnerSlots[7][0] = mark;
         break;
       
-      case "4":
+      case "4":        
         board[1][0] = mark;
+        winnerSlots[1][0] = mark;
+        winnerSlots[5][1] = mark;
         break;
       
-      case "5":
+      case "5":        
         board[1][1] = mark;
+        winnerSlots[1][1] = mark;
+        winnerSlots[3][1] = mark;
+        winnerSlots[4][1] = mark;
+        winnerSlots[6][1] = mark;
         break;
       
-      case "6":
+      case "6":        
         board[1][2] = mark;
+        winnerSlots[1][2] = mark;
+        winnerSlots[7][1] = mark;
         break;
       
-      case "7":
+      case "7":        
         board[2][0] = mark;
+        winnerSlots[2][0] = mark;
+        winnerSlots[4][2] = mark;
+        winnerSlots[5][2] = mark;
         break;
       
-      case "8":
+      case "8":        
         board[2][1] = mark;
+        winnerSlots[2][1] = mark;
+        winnerSlots[6][2] = mark;
         break;
             
-      default:
+      default:        
         board[2][2] = mark;
+        winnerSlots[2][2] = mark;
+        winnerSlots[3][2] = mark;
+        winnerSlots[7][2] = mark;
         break;
     }
   };
 
-  const boardStatus = (player1, player2) => {
-    console.log(`   ${player1.getName()}: ${player1.getMark()}`, " vs ", `${player2.getName()}: ${player2.getMark()}`);
-    board.forEach(row => {
-      console.log("\t\t", row.join(" | "));
-    })    
-    console.log("\n");
-  }
-
-  const winner = (playerSlots) => {
-    let winningPlayer = winnerSlots.some((slots) => {
-      return slots.every((slot, index) => playerSlots[index] === slot);
-    });
-
+  const winner = (mark) => {    
+    let winningPlayer = winnerSlots.some(slots => slots.every(slot => slot === mark));
     return winningPlayer;
   }
 
-  return { selectPosition, boardStatus, winner };
-})();
-
-game = (function () {
-  const validMarks = /[xXoO]/;
-  
-  const startGame = () => {    
-    let firstPlayerName = prompt("What's your name player 1?");
-    let secondPlayerName = prompt("What's your name player 2?");
-    let firstPlayerMark = prompt('Which is your mark Player 1?\nX : O').toUpperCase();
-    let secondPlayerMark = firstPlayerMark === "X" ? "O" : "X";
-
-    while (!firstPlayerMark.match(validMarks)) {
-      firstPlayerMark = prompt('Which is your mark Player 1?\nX : O').toUpperCase();
-      secondPlayerMark = firstPlayerMark === "X" ? "O" : "X";
-    }    
-
-    let player1 = player(firstPlayerName, firstPlayerMark);
-    let player2 = player(secondPlayerName, secondPlayerMark);
-    gameBoard.boardStatus(player1, player2);
-
-    player1.setMyTurn();
-    while (true){            
-      if (player1.getMyTurn()) {        
-        swapTurns(player1, player2);
-        gameBoard.boardStatus(player1, player2);
-
-        if(gameBoard.winner(player1.getSelectedSlots()))
-          return console.log(`The winner is ${player1.getName()}: ${player1.getMark()}`);
-      }
-      else {        
-        swapTurns(player2, player1);
-        gameBoard.boardStatus(player1, player2);
-
-        if(gameBoard.winner(player2.getSelectedSlots()))
-          return console.log(`The winner is ${player2.getName()}: ${player2.getMark()}`);
-      }
-    }
+  const tie = () => {
+    let isTie = board.every(row => row.every(slot => typeof slot !== 'number'));
+    return isTie;
   }
 
-  const swapTurns = (firstPlayer, secondPlayer) => {
-    let validPositions = /[1-9]/;
+  const resetBoard = () => {
+    winnerSlots = [
+      //horizontal
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+      //diagonal
+      [1, 5, 9],
+      [3, 5, 7],
+      //vertical
+      [1, 4, 7],
+      [2, 5, 8],
+      [3, 6, 9]
+    ];
+    board = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9]
+    ];
+    const boardSlots = Components.getSlots();
+    boardSlots.forEach(slot => {
+      slot.classList.value = "slot";
+      slot.removeAttribute('disabled');
+    })
+  }
 
-    let position = prompt(`${firstPlayer.getName()} turn\nWich square do you gonna mark (1-9)?`);
-    while (!position.match(validPositions)) {
-      position = prompt(`${firstPlayer.getName()} turn\nPlease, select any digit from 1-9`);
-    }
-    firstPlayer.setSelectedSlots(Number(position));
-
-    gameBoard.selectPosition(position, firstPlayer.getMark());    
-    firstPlayer.setMyTurn();    
-    secondPlayer.setMyTurn();
-  }  
-
-  return { startGame };
+  return { selectPosition, winner, tie, resetBoard };
 })();
 
-function player(name, mark) {
+const GameFlow = (function () {
+  let nameP1;
+  let nameP2;
+  let markP1;
+  let markP2;
+  let turn;
+  const board = Components.getGameBoard();
+  const slots = Components.getSlots();
+    
+  const setPlayerNames = () => {
+    nameP1 = Components.getP1Name();
+    nameP2 = Components.getP2Name();
+    
+    if (!nameP1 || !nameP2) {      
+      Components.displayErrorNames();
+      return;
+    }
+    
+    Components.displayMenuNames("none");
+    Components.displayMenuMark();
+    Components.displayPlayerNames(nameP1, nameP2);    
+  }
+
+  const setPlayerMarks = () => {
+    markP1 = Components.getMark();
+    markP2 = markP1 === "X" ? "O" : "X";
+    turn = markP1;
+
+    if (markP1) {
+      Components.displayMenuMark("none");
+      Components.displayBoard(undefined, turn);
+      startGame();
+      return;
+    }
+
+    Components.displayErrorMarks();
+  }
+
+  const startGame = () => {
+    const player1 = player(nameP1, markP1);
+    const player2 = player(nameP2, markP2);    
+        
+    slots.forEach(slot => {
+      slot.addEventListener('click', function() {
+        GameBoard.selectPosition(this.dataset.position, turn);
+        this.classList.replace('slot', turn);
+        this.setAttribute('disabled', "");
+
+        if (GameBoard.winner(turn)) {
+          let winner = turn === player1.getMark() ? player1 : player2;
+          winner.setVictories();
+          Components.setModalMessage(`The winner is ${winner.getName()}`);
+          Components.displayModal();
+          Components.setPlayersScore(winner);
+          GameBoard.resetBoard();
+        } else if (GameBoard.tie()) {
+          Components.setModalMessage("TIE!");
+          Components.displayModal();
+          GameBoard.resetBoard();
+        }
+
+        swapTurns(turn);
+      })
+
+
+    })
+  }
+
+  const swapTurns = (lastTurn) => {    
+    turn = turn === "X" ? "O" : "X";
+    board.classList.replace(lastTurn, turn);
+  }
+
+  return { setPlayerNames, setPlayerMarks };
+})();
+
+function player(name = `Player ${Math.floor(Math.random()*100)}`, mark) {
   let playerName = name;
   let playerMark = mark;
-  let selectedSlots = [];
-  let myTurn = false;
+  let victories = 0;
 
   const getName = () => {
     return playerName;
@@ -154,23 +337,13 @@ function player(name, mark) {
     return playerMark;
   }
 
-  const setMyTurn = () => {
-    myTurn = !myTurn;
+  const getVictories = () => {
+    return victories;
   }
 
-  const getMyTurn = () => {
-    return myTurn;
+  const setVictories = () => {
+    victories++;
   }
 
-  const setSelectedSlots = slot => {
-    selectedSlots.push(slot);
-  }
-
-  const getSelectedSlots = () => {
-    return selectedSlots;
-  }
-
-  return { getName, getMark, setMyTurn, getMyTurn, setSelectedSlots, getSelectedSlots };
+  return { getName, getMark, getVictories, setVictories };
 }
-
-game.startGame();
